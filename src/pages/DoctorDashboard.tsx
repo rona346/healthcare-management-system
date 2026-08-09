@@ -61,6 +61,7 @@ async function fetchDashboardStats() {
   if (!user) return;
   try {
     const data = await getDashboardStats(user.uid);
+    console.log("Dashboard Stats:", data);
     setStats(data);
     const recentActivities = await getRecentActivities(user.uid);
     setActivities(recentActivities);
@@ -74,6 +75,13 @@ async function fetchAppointments(){
   if(!user) return;
   try{
     const data = await getDoctorAppointments(user.uid);
+    console.table(
+      data.map((a: any) => ({
+        patientId: a.patientId,
+        patientName: a.patientName,
+        doctorId: a.doctorId,
+      }))
+    );
     console.log(data);
     setAppointments(data);
   }catch(error){

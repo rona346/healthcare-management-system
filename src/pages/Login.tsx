@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { FcGoogle } from "react-icons/fc";
-
+import { Eye, EyeOff } from "lucide-react";
 export default function Login() {
 
   const {
@@ -20,6 +20,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [isSignup, setIsSignup] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   
   useEffect(() => {
   if (!user) return;
@@ -113,13 +114,27 @@ return (
       />
 
       {/* Password */}
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        className="w-full border rounded-xl p-3 mb-6 outline-none focus:ring-2 focus:ring-stone-500"
-      />
+      <div className="relative mb-6">
+        <input
+          type={showPassword ? "text" : "password"}
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="w-full border rounded-xl p-3 pr-12 outline-none focus:ring-2 focus:ring-stone-500"
+        />
+
+        <button
+          type="button"
+          onClick={() => setShowPassword(!showPassword)}
+          className="absolute right-4 top-1/2 -translate-y-1/2 text-stone-500 hover:text-stone-800"
+        >
+          {showPassword ? (
+            <EyeOff className="w-5 h-5" />
+          ) : (
+            <Eye className="w-5 h-5" />
+          )}
+        </button>
+      </div>
 
       {!isSignup && (
       <button

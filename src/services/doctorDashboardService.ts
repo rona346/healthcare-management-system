@@ -24,6 +24,18 @@ export async function getDashboardStats(doctorId: string) {
 
     const appointments = snapshot.docs.map((doc) => doc.data());
     console.log("Dashboard Appointments:", appointments);
+    console.table(
+        appointments.map(a => ({
+          patientId: a.patientId,
+          patientName: a.patientName,
+          doctorId: a.doctorId,
+        }))
+      );
+
+    console.log(
+  "Unique Patient IDs:",
+  [...new Set(appointments.map((a: any) => a.patientId))]
+);
     
     const today = new Date().toISOString().split("T")[0];
 

@@ -1,263 +1,272 @@
-# Sareen Medical Care — AI-Powered Patient Management
+# Healthcare Management System
 
-A comprehensive, full-stack, enterprise-grade healthcare and telemedicine portal built for **Dr. Devendra Sareen**. This platform provides a secure patient portal, doctor schedules, administrative analytics, real-time doctor-patient communication, and an advanced AI-powered diagnostic helper powered by Google Gemini.
+A healthcare management web application built using React, TypeScript, Firebase Authentication, Cloud Firestore, Tailwind CSS, Vite, and Express. The project demonstrates role-based access control (RBAC), appointment management, authentication, real-time data synchronization with Firebase, and clean frontend architecture suitable for a software developer internship portfolio.
 
 ---
 
-## 📖 Table of Contents
-- [Project Description](#-project-description)
+## 📋 Table of Contents
+- [Project Overview](#-project-overview)
 - [Key Features](#-key-features)
-- [User Roles & Permissions](#-user-roles--permissions)
-  - [Patient Portal](#1-patient-portal)
-  - [Doctor Panel](#2-doctor-panel)
-  - [Administrative Dashboard](#3-administrative-dashboard)
-- [Tech Stack](#%EF%B8%8F-tech-stack)
-- [Firebase Architecture & Services](#%EF%B8%8F-firebase-architecture--services)
-- [AI Capabilities (Gemini API)](#-ai-capabilities-gemini-api)
-- [Project Directory Structure](#%EF%B8%8F-project-directory-structure)
-- [Installation & Setup Steps](#%EF%B8%8F-installation--setup-steps)
+- [User Roles & Capabilities](#-user-roles--capabilities)
+  - [Patient Role](#1-patient-role)
+  - [Doctor Role](#2-doctor-role)
+  - [Admin Role](#3-admin-role)
+- [Architecture Overview](#-architecture-overview)
+- [Authentication Flow](#-authentication-flow)
+- [Service Layer Architecture](#-service-layer-architecture)
+- [Project Structure](#-project-structure)
+- [Tech Stack](#-tech-stack)
+- [Installation & Setup](#-installation--setup)
 - [Environment Variables](#-environment-variables)
-- [Deployment Instructions](#-deployment-instructions)
-- [Screenshots & Visual Placements](#-screenshots--visual-placements)
-- [Future Enhancements](#-future-enhancements)
-- [License](#-license)
+- [What I Learned](#-what-i-learned)
+- [Future Improvements](#-future-improvements)
+- [Author](#-author)
 
 ---
 
-## 🌟 Project Description
-**Sareen Medical Care** is a modern patient-management system designed to bridge the gap between healthcare providers and patients. By combining real-time scheduling, intuitive patient portals, robust analytics, and next-generation generative AI, the platform automates clinic workflows, reduces administrative bottlenecks, and delivers personalized patient guidance through secure symptom assessment and remote medical supervision.
+## 🏥 Project Overview
+
+The **Healthcare Management System** is a responsive web application created to simplify clinic appointment workflows and demonstrate a role-based healthcare application architecture. Patients can book appointments, receive appointment updates, and communicate with doctors, while doctors and administrators can manage schedules, users, appointments, and dashboard analytics.
+
+Designed with modularity and scalability in mind, the frontend leverages React, TypeScript, and Tailwind CSS for a clean, fast user interface, while Firebase (Authentication and Cloud Firestore) handles identity management and real-time database capabilities. An Express server is included to support backend routing and future API integration.
 
 ---
 
 ## ✨ Key Features
-*   **Dual-Engine Telemedicine Scheduler:** Smooth, real-time booking for both on-site visits and video appointments.
-*   **Secure Multi-User Auth:** Unified authentication flow using Firebase Google Sign-In, protected against popup cancellations and race conditions.
-*   **AI-Powered Preliminary Diagnosis:** Interactive medical assistant running on the latest Gemini models for symptom analysis.
-*   **Real-Time Communications:** Multi-party live chat for immediate patient support, consultation messaging, and file attachments.
-*   **Interactive Analytics Panels:** Modern charting tools that aggregate clinic usage, registration metrics, and app bookings for administrators.
-*   **Dynamic Prescription Management:** Digital tracking of historic prescriptions, dosing instructions, and diagnostic advice.
+
+- **Role-Based Access Control (RBAC):** Distinct dashboards and permission flows tailored for Patients, Doctors, and Administrators.
+- **Appointment Scheduling:** Patients can select a doctor, choose a date and time, and create appointment requests that doctors can manage.
+- **Appointment Status Tracking:** Doctors can confirm or cancel appointments, and patients receive updated appointment status information.
+- **Doctor-Patient Chat (In Progress):** A chat module is being integrated so doctors and patients can communicate directly through the application.
+- **Dashboard Analytics:** Admin dashboard displays operational summaries, booking information, and user statistics.
+- **Secure Authentication:** Multi-provider authentication with session persistence and route protection.
+- **Responsive Interface:** Mobile-first layout engineered with Tailwind CSS for seamless access on desktop, tablet, and mobile browsers.
 
 ---
 
-## 👥 User Roles & Permissions
+## 👥 User Roles & Capabilities
 
-The application implements a role-based access control (RBAC) model split into three distinct dashboards:
+### 1. Patient Role
+- **Personal Dashboard:** View upcoming appointments, active prescriptions, and recent updates at a glance.
+- **Appointment Booking:** Select preferred doctors, choose consultation modes (In-Person / Virtual), and reserve available time slots.
+- **Prescription Portal:** Access a history of issued prescriptions with detailed dosage and doctor instructions.
+- **Direct Messaging:** Send direct follow-up messages to assigned medical personnel.
+- **Profile Management:** Update contact information, medical history notes, and personal demographics securely.
 
-### 1. Patient Portal
-*   **Dashboard:** High-level summary of upcoming appointments, recently prescribed medications, and medical updates.
-*   **Symptom Diagnostic Tool:** Self-service console where patients input symptoms to obtain instant AI recommendations.
-*   **Appointment Booking:** Dynamic slot selection for selecting available times with specific doctors.
-*   **My Prescriptions:** Log of past and present prescriptions detailing medications, dosage, frequency, and instructions.
-*   **Chat Portal:** Direct connection to assigned primary care physicians or support staff.
-*   **Profile Settings:** Secure management of personal and demographic information.
+### 2. Doctor Role
+- **Schedule Management:** Review appointment requests and patient details.
+- **Patient Directory:** View registered patient information relevant to appointments and consultation workflows.
+- **AI-Assisted Diagnosis:** Review patient symptoms and access AI-assisted diagnosis support within the dashboard.
+- **Appointment Status Updates:** Approve, reschedule, or complete pending appointment requests in real time.
 
-### 2. Doctor Panel
-*   **Physician Dashboard:** Overview of the daily clinical schedule, active consultation list, and quick statistics.
-*   **Patient Manager:** Comprehensive directory of patients containing detailed individual history logs.
-*   **Appointment Scheduler:** Tools to approve, reschedule, or cancel patient requests in real time.
-*   **Prescription Writer:** Digital forms to write, edit, and send official prescriptions directly to patient portals.
-
-### 3. Administrative Dashboard
-*   **Global Analytics:** Data visualizations displaying platform signups, booking ratios, and operational health.
-*   **Physician Profiles:** Complete CRUD controls for adding, editing, and managing staff clinicians.
-*   **Patient Directory:** Overview of all registered accounts, profile updates, and role-based assignments.
-*   **Global Appointment Monitor:** Administrative controls to oversee and manage overall hospital bookings.
+### 3. Admin Role
+- **Operational Analytics:** Monitor total patient registrations, completed consultations, and booking trends over time.
+- **Doctor Directory Management:** Add, edit, or manage doctor profiles, specialties, and schedule configurations.
+- **Patient Management:** Overview of all registered accounts with permissions to resolve account issues.
+- **Master Appointment Control:** View and manage appointments across all doctors and patients.
 
 ---
 
-## 🛠️ Tech Stack
+## 🏗️ Architecture Overview
 
-### Frontend Architecture
-*   **Core Framework:** [React 19](https://react.dev/) — Declarative, component-driven web library.
-*   **Compiler & Bundler:** [Vite 6](https://vite.dev/) — Next-generation frontend tooling.
-*   **Language:** [TypeScript](https://www.typescriptlang.org/) — Fully type-safe programming with robust structures.
-*   **Styling Engine:** [Tailwind CSS v4](https://tailwindcss.com/) — High-performance utility-first design.
-*   **Animations:** [Motion](https://motion.dev/) — Fluid, hardware-accelerated animations and page transitions.
-*   **Icons:** [Lucide React](https://lucide.dev/) — Lightweight vector medical and navigation iconography.
-*   **Data Visualization:** [Recharts](https://recharts.org/) — Responsive, modular charting for administrative summaries.
+The project follows a modular React architecture with Firebase services and an Express backend bridge:
 
-### Server & Build Runtime
-*   **Production Server:** [Express](https://expressjs.com/) — Lightweight Node.js server executing production asset delivery.
-*   **Dev Engine:** [tsx](https://github.com/privatenumber/tsx) — Fast Node.js execution wrapper to load TypeScript modules directly.
+```
+┌─────────────────────────────────────────────────────────┐
+│                    Client Browser                       │
+│  (React 19 + TypeScript + Tailwind CSS + Vite Engine)   │
+└───────────┬─────────────────────────────────┬───────────┘
+            │                                 │
+     HTTP / REST API                     Firebase SDK
+            │ (Express / Node.js)             │
+            ▼                                 ▼
+┌───────────────────────┐         ┌───────────────────────┐
+│     Express Server    │         │       Firebase        │
+│  (API Middleware /    │         │  - Auth (Identity)    │
+│   Routing / Asset)    │         │  - Firestore (NoSQL)  │
+└───────────────────────┘         └───────────────────────┘
+```
 
----
-
-## ⚡ Firebase Architecture & Services
-
-The application relies on **Firebase** for cloud operations, data synchronization, and security rules:
-
-1.  **Firebase Authentication:**
-    *   Secure OAuth 2.0 with Google Sign-In.
-    *   Robust popup handler guarding the `isLoggingIn` state. Even if patients close or cancel the sign-in modal, the system intercepts focus events, checks actual server authentication status, and dynamically restores the UI safely.
-2.  **Cloud Firestore:**
-    *   Real-time NoSQL document database structured to securely manage `users`, `appointments`, `messages`, and `prescriptions` collections.
-3.  **Security Rules (`firestore.rules`):**
-    *   Strict, schema-level rules ensuring authenticated users can only view or edit their own records.
-    *   Strict administrator rules guarding doctor and patient directories.
+- **Frontend:** Single-page application built with React and TypeScript, using Vite for development and bundling. Styling is handled via Tailwind CSS utility classes.
+- **Backend Bridge:** An Express.js server used for routing and future API integrations.
+- **Database & Auth:** Firebase Authentication handles user identity, while Cloud Firestore stores collections such as users, appointments, messages, and notifications.
 
 ---
 
-## 🤖 AI Capabilities (Gemini API)
+## 🔐 Authentication Flow
 
-The system is equipped with an integrated **AI Diagnosis System** powered by Google GenAI:
-
-*   **SDK Used:** `@google/genai` (V1 SDK)
-*   **Model:** `gemini-3-flash-preview`
-*   **Behavioral Protocol:**
-    1.  The patient enters their current symptoms.
-    2.  The backend routes the prompt to the model with specific medical context instructions.
-    3.  Gemini analyzes the details to suggest 3-5 potential conditions, their severity level (Mild, Moderate, Severe), and recommends medical tests or specialists.
-    4.  It automatically attaches a crucial, bold medical disclaimer emphasizing that the analysis is informational and does not replace official clinical diagnoses.
+1. **Identity Request:** The user selects their authentication method (Email/Password or Google OAuth) via the login component.
+2. **Firebase Auth Verification:** Firebase Authentication processes the request and returns a user token along with unique UID metadata.
+3. **Role Resolution:** Upon successful authentication, the application queries the `users` collection in Cloud Firestore using the authenticated UID to resolve the assigned user role (`patient`, `doctor`, or `admin`).
+4. **Context & Route Protection:** The `useAuth` hook stores the current user state and role in a global React context wrapper. Protected routes check this state before mounting, redirecting unauthorized users to appropriate portals or the login screen.
+5. **Session Persistence:** Firebase automatically maintains login state across browser sessions. On application mount, `onAuthStateChanged` restores the user context gracefully.
 
 ---
 
-## 📁 Project Directory Structure
+## 🛠️ Service Layer Architecture
 
-```bash
-├── .env.example              # Template for secret keys & hosting URLs
-├── .gitignore                # Specified paths to exclude from deployment
-├── bun.lock                  # Lockfile for Bun package resolution
-├── firebase-blueprint.json   # Structural representation for Firestore databases
-├── firestore.rules           # Security rules enforcing strict RBAC on collections
-├── index.html                # Single-page application template entry
-├── metadata.json             # AI Studio applet name and frame permissions configuration
-├── package.json              # Standard npm configuration & dependency graph
-├── server.ts                 # Full-stack entry point utilizing Express and Vite middlewares
-├── tsconfig.json             # Strict TypeScript configuration
-├── vite.config.ts            # Vite compiler plugins and configurations
-└── src/
-    ├── main.tsx              # React mounting root
-    ├── App.tsx               # Main routing router and high-level component structure
-    ├── index.css             # Entry point for global CSS importing Tailwind
-    ├── firebase.ts           # Firebase SDK, database, and auth initialization
-    ├── types.ts              # Centralized TypeScript types, enums, and medical schemas
-    ├── components/           # Reusable functional components
-    │   ├── ErrorBoundary.tsx # Catch-all component for React runtime rendering protection
-    │   ├── FirestoreTest.tsx # Debug widget for Firestore connection states
-    │   ├── Navbar.tsx        # Responsive navigation and global user controls
-    │   ├── Notifications.tsx # User notification trays
-    │   └── Sidebar.tsx       # Expandable navigation menu matching user roles
-    ├── hooks/                # Custom React Hooks
-    │   └── useAuth.tsx       # Context wrapper handling state machine auth workflows
-    ├── services/             # External service wrappers
-    │   └── gemini.ts         # Secure module wrapping Google Gemini API actions
-    └── pages/                # High-level screens and user dashboards
-        ├── AdminAnalytics.tsx
-        ├── AdminAppointments.tsx
-        ├── AdminDashboard.tsx
-        ├── AdminDoctors.tsx
-        ├── AdminPatients.tsx
-        ├── AppointmentBooking.tsx
-        ├── Chat.tsx
-        ├── DiagnosisSystem.tsx
-        ├── DoctorAppointments.tsx
-        ├── DoctorDashboard.tsx
-        ├── DoctorPatients.tsx
-        ├── Landing.tsx
-        ├── PatientAppointments.tsx
-        ├── PatientDashboard.tsx
-        ├── PatientPrescriptions.tsx
-        └── Profile.tsx
+To maintain separation of concerns and prevent tightly coupled code, the application separates UI components from data-fetching logic:
+
+- **Firebase Service Module (`src/firebase.ts`):** Initializes the Firebase App instance, exports `auth` and `db` references, and standardizes configuration settings.
+- **Data Collections Structure:**
+  - `users`: Stores user profile data, contact information, and role assignments (`patient`, `doctor`, `admin`).
+  - `appointments`: Stores scheduled appointment records including doctor ID, patient ID, date, time slot, status (`pending`, `confirmed`, `completed`, `cancelled`), and type (`in-person`, `virtual`).
+  - `prescriptions`: Contains issued medication records tied to specific appointments and patients.
+  - `messages`: Manages chat message streams between patients and healthcare providers.
+- **Service Decoupling:** Components interact with Firestore via modular helper functions, keeping components clean and testable.
+
+---
+
+## 📁 Project Structure
+
+```
+├── public/                    # Static assets
+├── src/
+│   ├── components/            # Reusable UI components
+│   │   ├── ErrorBoundary.tsx  # Runtime error boundary handler
+│   │   ├── Navbar.tsx         # Responsive top navigation header
+│   │   ├── Notifications.tsx  # In-app notification popovers
+│   │   └── Sidebar.tsx        # Role-based navigation menu
+│   ├── hooks/                 # Custom React hooks
+│   │   └── useAuth.tsx        # Global auth context and role hook
+│   ├── pages/                 # Role-based route screens
+│   │   ├── AdminAnalytics.tsx
+│   │   ├── AdminAppointments.tsx
+│   │   ├── AdminDashboard.tsx
+│   │   ├── AdminDoctors.tsx
+│   │   ├── AdminPatients.tsx
+│   │   ├── AppointmentBooking.tsx
+│   │   ├── Chat.tsx
+│   │   ├── DoctorAppointments.tsx
+│   │   ├── DoctorDashboard.tsx
+│   │   ├── DoctorPatients.tsx
+│   │   ├── PatientAppointments.tsx
+│   │   ├── PatientDashboard.tsx
+│   │   ├── PatientPrescriptions.tsx
+│   │   └── Profile.tsx
+│   ├── services/              # API and external service wrappers
+│   ├── types.ts               # Shared TypeScript interfaces & enums
+│   ├── firebase.ts            # Firebase app and database initialization
+│   ├── index.css              # Global styles importing Tailwind CSS
+│   ├── main.tsx               # Application entry point
+│   └── App.tsx                # Main router and layout manager
+├── .env.example               # Template for environment configuration
+├── .gitignore                 # Excluded git tracking files
+├── firestore.rules            # Firestore security rules
+├── index.html                 # Main HTML document template
+├── package.json               # Project dependencies and script declarations
+├── server.ts                  # Express backend entry point
+├── tsconfig.json              # TypeScript compiler configuration
+└── vite.config.ts             # Vite bundler configuration
 ```
 
 ---
 
-## ⚙️ Installation & Setup Steps
+## 💻 Tech Stack
 
-Follow these steps to run the application locally on your system:
+| Technology | Purpose |
+| :--- | :--- |
+| **React 19** | User interface library for building component-driven SPA |
+| **TypeScript** | Static typing for data models, props, and API contracts |
+| **Firebase Auth** | User authentication and session management |
+| **Cloud Firestore** | Real-time NoSQL database for application data |
+| **Tailwind CSS** | Utility-first CSS framework for responsive layout styling |
+| **Vite 6** | Modern build tool and development server |
+| **Express.js** | Node.js web framework for backend serving and routing |
+| **Lucide React** | Scalable vector icon library |
+| **Motion** | Fluid animations and UI transitions |
+| **Recharts** | Data visualization for admin metrics and reporting |
+
+---
+
+## ⚡ Installation & Setup
+
+Follow these steps to run the project locally:
 
 ### Prerequisites
-*   [Node.js](https://nodejs.org/) (v18 or higher recommended)
-*   An active [Firebase Project](https://console.firebase.google.com/)
+- **Node.js**: v18.0.0 or higher
+- **npm**: v9.0.0 or higher
+- **Firebase Account**: Access to Firebase Console to create a Firestore database
 
-### Step 1: Clone & Navigate
-Download or extract the source files into your local environment:
+### 1. Clone the Repository
 ```bash
-cd react-example
+git clone https://github.com/guptaronak810/healthcare-management-system.git
+cd healthcare-management-system
 ```
 
-### Step 2: Install Dependencies
-Install all required libraries mapped in `package.json`:
+### 2. Install Dependencies
 ```bash
 npm install
 ```
 
-### Step 3: Configure Environment Variables
-Create a local `.env` file by copying the template:
+### 3. Configure Environment Variables
+Copy `.env.example` to create your local `.env` file:
 ```bash
 cp .env.example .env
 ```
-Fill in the credentials in `.env` (refer to the [Environment Variables](#-environment-variables) section below).
+Fill in your Firebase credentials and environment details in `.env` (see below).
 
-### Step 4: Run the Development Server
-Launch the full-stack development server running on port `3000`:
+### 4. Start Development Server
 ```bash
 npm run dev
 ```
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open [http://localhost:3000](http://localhost:3000) in your browser to view the application.
 
-### Step 5: Build for Production
-To bundle compile and bundle the application assets for live environments:
+### 5. Build for Production
 ```bash
 npm run build
+npm start
 ```
 
 ---
 
 ## 🔑 Environment Variables
 
-The application requires specific variables to perform operations safely. Ensure they are configured in your active runtime context or `.env` file:
+Create a `.env` file in the root directory with your Firebase configuration values:
 
 ```env
-# Google GenAI API Key
-# Required to route symptoms to Gemini models safely inside server.ts.
-GEMINI_API_KEY="your-google-gemini-api-key"
-
-# Application hosting URL
-# Self-referential URL where the application or proxy is located.
+# Application Host URL
 APP_URL="http://localhost:3000"
+
+# Firebase Client Configuration
+VITE_FIREBASE_API_KEY="your_api_key"
+VITE_FIREBASE_AUTH_DOMAIN="your_project_id.firebaseapp.com"
+VITE_FIREBASE_PROJECT_ID="your_project_id"
+VITE_FIREBASE_STORAGE_BUCKET="your_project_id.firebasestorage.app"
+VITE_FIREBASE_MESSAGING_SENDER_ID="your_messaging_sender_id"
+VITE_FIREBASE_APP_ID="your_app_id"
 ```
 
 ---
 
-## 🚀 Deployment Instructions
+## 💡 What I Learned
 
-### Cloud Run Container Deployment
-1.  Verify the environment is set up with Node.js and dependencies are bundled into the production directory:
-    ```bash
-    npm run build
-    ```
-2.  Start the production deployment server which serves built files and exposes port `3000`:
-    ```bash
-    npm run start
-    ```
+Building this project helped me strengthen practical React and Firebase development skills:
 
-### Deploying Firestore Rules
-When making changes to database collections or access requirements, deploy the security parameters using the Firebase CLI:
-```bash
-firebase deploy --only firestore:rules
-```
+- **Authentication & Context Management:** Implementing a reusable `useAuth` hook and authentication flow with Firebase.
+- **Role-Based Access Control:** Designing separate dashboards and permission flows for Admin, Doctor, and Patient users.
+- **TypeScript & React:** Using interfaces and component-based architecture to keep the application organized and maintainable.
+- **Service Layer Architecture:** Keeping Firebase logic separate from UI components for easier maintenance and future database migration.
+- **Project Organization:** Structuring the project with reusable components, custom hooks, and modular service functions.
 
 ---
 
-## 📸 Screenshots & Visual Placements
+## 🚀 Future Improvements
 
-> *Visual mockups and layouts of key system panels in operation.*
-
-### 🖥️ User Dashboard Layout
-| Patient Overview | Admin Analytics Panel |
-| :---: | :---: |
-| Elegant light theme showing diagnostic summaries, upcoming appointments, and instant chat trays with primary care physicians. | Dynamic charts rendering clinical metrics, registration volume, and appointment ratios. |
+- **Complete Role-Based Authorization:** Ensure each user can access only the dashboard assigned to their role.
+- **Real-Time Doctor-Patient Chat:** Complete the dynamic chat implementation between authenticated users.
+- **MySQL + Node.js/Express Backend:** Migrate Firestore data operations through a dedicated backend API layer.
+- **Video Consultation & Notifications:** Expand appointment reminders and consultation features.
 
 ---
 
-## 🔮 Future Enhancements
-*   **Prescription Auto-Refills:** Direct linkage between pharmacies and doctor approval chains.
-*   **Video Consultations:** Integrated high-performance WebRTC video rooms for direct teleconsultations within the portal.
-*   **Multi-Language AI:** Expanding the AI Diagnosis assistant to support diverse languages and offline accessibility.
-*   **Wearable Syncing:** Syncing wearable health metrics (heart rate, sleep cycles) into patient profile trends.
+## 👤 Author
+
+**Ronak Gupta**
+- GitHub: [github.com/guptaronak810](https://github.com/guptaronak810)
+- LinkedIn: Add your LinkedIn profile URL here
+- Email: guptaronak810@gmail.com
 
 ---
 
-## 📄 License
-This project is licensed under the MIT License. See the LICENSE file for details.
+*This project was developed as a software engineering portfolio application to demonstrate full-stack web development skills.*
