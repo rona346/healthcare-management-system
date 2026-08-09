@@ -5,6 +5,7 @@ A healthcare management web application built using React, TypeScript, Firebase 
 ---
 
 ## 📋 Table of Contents
+
 - [Project Overview](#-project-overview)
 - [Key Features](#-key-features)
 - [User Roles & Capabilities](#-user-roles--capabilities)
@@ -47,6 +48,7 @@ Designed with modularity and scalability in mind, the frontend leverages React, 
 ## 👥 User Roles & Capabilities
 
 ### 1. Patient Role
+
 - **Personal Dashboard:** View upcoming appointments, active prescriptions, and recent updates at a glance.
 - **Appointment Booking:** Select preferred doctors, choose consultation modes (In-Person / Virtual), and reserve available time slots.
 - **Prescription Portal:** Access a history of issued prescriptions with detailed dosage and doctor instructions.
@@ -54,12 +56,14 @@ Designed with modularity and scalability in mind, the frontend leverages React, 
 - **Profile Management:** Update contact information, medical history notes, and personal demographics securely.
 
 ### 2. Doctor Role
+
 - **Schedule Management:** Review appointment requests and patient details.
 - **Patient Directory:** View registered patient information relevant to appointments and consultation workflows.
 - **AI-Assisted Diagnosis:** Review patient symptoms and access AI-assisted diagnosis support within the dashboard.
 - **Appointment Status Updates:** Approve, reschedule, or complete pending appointment requests in real time.
 
 ### 3. Admin Role
+
 - **Operational Analytics:** Monitor total patient registrations, completed consultations, and booking trends over time.
 - **Doctor Directory Management:** Add, edit, or manage doctor profiles, specialties, and schedule configurations.
 - **Patient Management:** Overview of all registered accounts with permissions to resolve account issues.
@@ -164,18 +168,18 @@ To maintain separation of concerns and prevent tightly coupled code, the applica
 
 ## 💻 Tech Stack
 
-| Technology | Purpose |
-| :--- | :--- |
-| **React 19** | User interface library for building component-driven SPA |
-| **TypeScript** | Static typing for data models, props, and API contracts |
-| **Firebase Auth** | User authentication and session management |
-| **Cloud Firestore** | Real-time NoSQL database for application data |
-| **Tailwind CSS** | Utility-first CSS framework for responsive layout styling |
-| **Vite 6** | Modern build tool and development server |
-| **Express.js** | Node.js web framework for backend serving and routing |
-| **Lucide React** | Scalable vector icon library |
-| **Motion** | Fluid animations and UI transitions |
-| **Recharts** | Data visualization for admin metrics and reporting |
+| Technology          | Purpose                                                   |
+| :------------------ | :-------------------------------------------------------- |
+| **React 19**        | User interface library for building component-driven SPA  |
+| **TypeScript**      | Static typing for data models, props, and API contracts   |
+| **Firebase Auth**   | User authentication and session management                |
+| **Cloud Firestore** | Real-time NoSQL database for application data             |
+| **Tailwind CSS**    | Utility-first CSS framework for responsive layout styling |
+| **Vite 6**          | Modern build tool and development server                  |
+| **Express.js**      | Node.js web framework for backend serving and routing     |
+| **Lucide React**    | Scalable vector icon library                              |
+| **Motion**          | Fluid animations and UI transitions                       |
+| **Recharts**        | Data visualization for admin metrics and reporting        |
 
 ---
 
@@ -184,35 +188,44 @@ To maintain separation of concerns and prevent tightly coupled code, the applica
 Follow these steps to run the project locally:
 
 ### Prerequisites
+
 - **Node.js**: v18.0.0 or higher
 - **npm**: v9.0.0 or higher
 - **Firebase Account**: Access to Firebase Console to create a Firestore database
 
 ### 1. Clone the Repository
+
 ```bash
 git clone https://github.com/guptaronak810/healthcare-management-system.git
 cd healthcare-management-system
 ```
 
 ### 2. Install Dependencies
+
 ```bash
 npm install
 ```
 
 ### 3. Configure Environment Variables
+
 Copy `.env.example` to create your local `.env` file:
+
 ```bash
 cp .env.example .env
 ```
+
 Fill in your Firebase credentials and environment details in `.env` (see below).
 
 ### 4. Start Development Server
+
 ```bash
 npm run dev
 ```
+
 Open [http://localhost:3000](http://localhost:3000) in your browser to view the application.
 
 ### 5. Build for Production
+
 ```bash
 npm run build
 npm start
@@ -263,10 +276,11 @@ Building this project helped me strengthen practical React and Firebase developm
 ## 👤 Author
 
 **Ronak Gupta**
-- GitHub: [github.com/guptaronak810](https://github.com/guptaronak810)
-- LinkedIn: Add your LinkedIn profile URL here
+
+- GitHub: [github.com/rona346](https://github.com/rona346)
+- LinkedIn: [www.linkedin.com/in/ronak-gupta-6a5382244](https://www.linkedin.com/in/ronak-gupta-6a5382244)
 - Email: guptaronak810@gmail.com
 
 ---
 
-*This project was developed as a software engineering portfolio application to demonstrate full-stack web development skills.*
+_This project was developed as a software engineering portfolio application to demonstrate full-stack web development skills._

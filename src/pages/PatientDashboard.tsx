@@ -134,7 +134,7 @@ useEffect(() => {
             <div className="space-y-4">
               <DiagnosisCard
                 condition="Mild Hypertension"
-                doctor="Dr. Devendra Sareen"
+                doctor="Dr. Sharma"
                 date="Sep 12, 2024"
               />
             </div>

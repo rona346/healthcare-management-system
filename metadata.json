@@ -1,5 +1,5 @@
 {
-  "name": "Sareen Medical Care - AI-Powered Patient Management",
-  "description": "A comprehensive healthcare platform for Dr. Devendra Sareen, featuring AI-powered diagnosis, multi-doctor management, and secure patient portals.",
+  "name": "Healthcare Management System",
+  "description": "A comprehensive healthcare platform for Dr. Sharma, featuring AI-powered diagnosis, multi-doctor management, and secure patient portals.",
   "requestFramePermissions": ["camera", "microphone", "geolocation"]
 }

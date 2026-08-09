@@ -70,7 +70,7 @@ export default function Chat() {
         </div>
         <div>
           <h2 className="font-serif text-lg text-stone-900">
-            {user?.role === 'doctor' ? 'Patient: John Doe' : 'Dr. Devendra Sareen'}
+            {user?.role === 'doctor' ? 'Patient: John Doe' : 'Dr. Sharma'}
           </h2>
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 bg-green-500 rounded-full" />
