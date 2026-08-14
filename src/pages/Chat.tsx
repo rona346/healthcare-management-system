@@ -1,64 +1,131 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, FormEvent } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { db } from '../firebase';
-import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, where } from 'firebase/firestore';
+import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, doc, getDoc, setDoc } from 'firebase/firestore';
 import { Message } from '../types';
 import { Send, User, Loader2 } from 'lucide-react';
 import { cn, formatTime } from '../lib/utils';
 import { handleFirestoreError, OperationType } from '../lib/firestore-errors';
+import { useParams } from 'react-router-dom';
 
 export default function Chat() {
   const { user } = useAuth();
+  const { chatId } = useParams();
+
+  const [chatDoctorName, setChatDoctorName] = useState('');
+  const [chatData, setChatData] = useState<any>(null);
+
+  const doctorId = chatData?.doctorId;
+  const patientId = chatData?.patientId;
+
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!chatId) return;
 
-  // For demo purposes, we'll use a hardcoded chatId
-  // In a real app, this would be derived from the doctor/patient pair
-  const chatId = user?.role === 'doctor' ? 'doctor_patient_123' : 'doctor_patient_123';
+    const loadChat = async () => {
+      try {
+        const chatDoc = await getDoc(doc(db, 'chats', chatId));
+
+        if (chatDoc.exists()) {
+          const data = chatDoc.data();
+
+          setChatData(data);
+
+          setChatDoctorName(
+            user?.role === 'patient'
+              ? data.doctorName || 'Doctor'
+              : data.patientName || 'Patient'
+          );
+        } else {
+          console.log('Chat document not found:', chatId);
+        }
+      } catch (error) {
+        console.error('Error loading chat:', error);
+      }
+    };
+
+    loadChat();
+  }, [chatId, user]);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || !chatId) return;
 
     const q = query(
       collection(db, `chats/${chatId}/messages`),
       orderBy('timestamp', 'asc')
     );
 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const msgs = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as Message[];
-      setMessages(msgs);
-      setLoading(false);
-      setTimeout(() => {
-        scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
-    }, (error) => {
-      handleFirestoreError(error, OperationType.GET, `chats/${chatId}/messages`);
-    });
+    const unsubscribe = onSnapshot(
+      q,
+      (snapshot) => {
+        const msgs = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        })) as Message[];
+
+        setMessages(msgs);
+        setLoading(false);
+
+        setTimeout(() => {
+          scrollRef.current?.scrollIntoView({
+            behavior: 'smooth',
+          });
+        }, 100);
+      },
+      (error) => {
+        handleFirestoreError(
+          error,
+          OperationType.GET,
+          `chats/${chatId}/messages`
+        );
+      }
+    );
 
     return () => unsubscribe();
   }, [user, chatId]);
 
-  const handleSendMessage = async (e: React.FormEvent) => {
+  const handleSendMessage = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!newMessage.trim() || !user) return;
 
-    const text = newMessage;
+    if (!newMessage.trim() || !user || !chatId || !chatData) return;
+
+    const text = newMessage.trim();
     setNewMessage('');
 
     try {
-      await addDoc(collection(db, `chats/${chatId}/messages`), {
-        chatId,
-        senderId: user.uid,
-        text,
-        timestamp: serverTimestamp(),
-      });
+      // Update chat metadata
+      await setDoc(
+        doc(db, 'chats', chatId),
+        {
+          doctorId: chatData.doctorId,
+          doctorName: chatData.doctorName,
+          patientId: chatData.patientId,
+          patientName: chatData.patientName,
+          updatedAt: serverTimestamp(),
+          lastMessage: text,
+        },
+        { merge: true }
+      );
+
+      // Save message
+      await addDoc(
+        collection(db, `chats/${chatId}/messages`),
+        {
+          chatId,
+          senderId: user.uid,
+          text,
+          timestamp: serverTimestamp(),
+        }
+      );
     } catch (error) {
-      handleFirestoreError(error, OperationType.WRITE, `chats/${chatId}/messages`);
+      handleFirestoreError(
+        error,
+        OperationType.WRITE,
+        `chats/${chatId}/messages`
+      );
     }
   };
 
@@ -70,7 +137,7 @@ export default function Chat() {
         </div>
         <div>
           <h2 className="font-serif text-lg text-stone-900">
-            {user?.role === 'doctor' ? 'Patient: John Doe' : 'Dr. Sharma'}
+            {chatData ? chatDoctorName : 'Loading...'}
           </h2>
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 bg-green-500 rounded-full" />

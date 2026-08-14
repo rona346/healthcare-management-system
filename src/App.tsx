@@ -14,6 +14,8 @@ import PatientAppointments from './pages/PatientAppointments';
 import PatientPrescriptions from './pages/PatientPrescriptions';
 import AppointmentBooking from './pages/AppointmentBooking';
 import DiagnosisSystem from './pages/DiagnosisSystem';
+import DoctorMessages from './pages/DoctorMessages';
+import PatientMessages from './pages/PatientMessages';
 import Login from "./pages/Login";
 import Chat from './pages/Chat';
 import Profile from './pages/Profile';
@@ -60,7 +62,8 @@ function AppContent() {
             <Route path="/doctor/appointments" element={<ProtectedRoute role="doctor"><DoctorAppointments /></ProtectedRoute>} />
             <Route path="/doctor/patients" element={<ProtectedRoute role="doctor"><DoctorPatients /></ProtectedRoute>} />
             <Route path="/doctor/diagnoses" element={<ProtectedRoute role="doctor"><DiagnosisSystem /></ProtectedRoute>} />
-            <Route path="/doctor/messages" element={<ProtectedRoute role="doctor"><Chat /></ProtectedRoute>} />
+            <Route path="/doctor/messages" element={<ProtectedRoute role="doctor"><DoctorMessages /></ProtectedRoute>} />
+            <Route path="/doctor/messages/:chatId" element={<ProtectedRoute role="doctor"><Chat /></ProtectedRoute>} />
             <Route path="/doctor/profile" element={<ProtectedRoute role="doctor"><Profile /></ProtectedRoute>} />
             
             {/* Patient Routes */}
@@ -69,7 +72,8 @@ function AppContent() {
             <Route path="/patient/book" element={<ProtectedRoute role="patient"><AppointmentBooking /></ProtectedRoute>} />
             <Route path="/patient/diagnoses" element={<ProtectedRoute role="patient"><DiagnosisSystem /></ProtectedRoute>} />
             <Route path="/patient/prescriptions" element={<ProtectedRoute role="patient"><PatientPrescriptions /></ProtectedRoute>} />
-            <Route path="/patient/chat" element={<ProtectedRoute role="patient"><Chat /></ProtectedRoute>} />
+            <Route path="/patient/chat" element={<ProtectedRoute role="patient"><PatientMessages /></ProtectedRoute>}/>
+            <Route path="/patient/chat/:chatId" element={<ProtectedRoute role="patient"><Chat /></ProtectedRoute>} />
             <Route path="/patient/profile" element={<ProtectedRoute role="patient"><Profile /></ProtectedRoute>} />
             
             {/* Fallback */}

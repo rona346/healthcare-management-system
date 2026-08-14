@@ -16,11 +16,34 @@ export default function PatientDashboard() {
   messages: 0,
 });
 
+const [upcomingAppointments, setUpcomingAppointments] = useState<any[]>([]);
+
+const latestAppointment =
+  upcomingAppointments.length > 0
+    ? upcomingAppointments[upcomingAppointments.length - 1]
+    : null;
+
+const selectedDoctor = latestAppointment
+  ? {
+      doctorId: latestAppointment.doctorId,
+      doctorName: latestAppointment.doctorName,
+    }
+  : null;
+    console.log('Upcoming appointments:', upcomingAppointments)
+    console.log('First appointment:', upcomingAppointments[0]);
+
+const latestChatId = latestAppointment
+  ? [latestAppointment.patientId, latestAppointment.doctorId]
+      .sort()
+      .join('_')
+  : null;
 const quickActions = [
   {
     icon: MessageSquare,
     label: "Chat with Doctor",
-    path: "/patient/chat",
+    path:latestChatId
+  ? `/patient/chat/${latestChatId}`
+  : "/patient/chat",
   },
   {
     icon: FileText,
@@ -34,7 +57,7 @@ const quickActions = [
   },
 ];
   // const [appointments, setAppointments] = useState<any[]>([]);
-  const [upcomingAppointments, setUpcomingAppointments] = useState<any[]>([]);
+
 const loadDashboardStats = async () => {
   if (!user) return;
 
@@ -226,10 +249,12 @@ function DiagnosisCard({ condition, doctor, date }: any) {
   );
 }
 
-function QuickAction({ icon: Icon, label,path }: any) {
+function QuickAction({ icon: Icon, label,path}: any) {
+  
   const navigate = useNavigate()
   return (
-    <button   onClick={() => navigate(path)} className="flex items-center gap-3 p-4 border border-stone-50 rounded-2xl hover:bg-stone-50 transition-colors text-left group">
+    <button onClick={() => {
+    navigate(path )}}className="flex items-center gap-3 p-4 border border-stone-50 rounded-2xl hover:bg-stone-50 transition-colors text-left group">
       <div className="w-10 h-10 bg-stone-50 rounded-xl flex items-center justify-center text-stone-400 group-hover:text-stone-900 transition-colors">
         <Icon className="w-5 h-5" />
       </div>
