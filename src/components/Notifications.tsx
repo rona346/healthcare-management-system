@@ -4,7 +4,7 @@ import { db } from '../firebase';
 import { collection, query, where, orderBy, onSnapshot, updateDoc, doc, deleteDoc, limit } from 'firebase/firestore';
 import { Bell, X, Check, Trash2, Calendar, MessageSquare, FileText, Info } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { cn, formatTime } from '../lib/utils';
+import { cn, formatTime, formatDate } from '../lib/utils';
 import { handleFirestoreError, OperationType } from '../lib/firestore-errors';
 
 interface Notification {
@@ -157,11 +157,12 @@ export default function Notifications() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between mb-1">
                           <h4 className="text-sm font-medium text-stone-900 truncate pr-4">{n.title}</h4>
-                          <span className="text-[10px] text-stone-300 uppercase tracking-widest">
-                            {formatTime(n.createdAt)}
+                          <span className="text-[10px] text-stone-500 uppercase tracking-widest">
+                            <div>{formatDate(n.createdAt)}</div>
+                            <div>{formatTime(n.createdAt)}</div>
                           </span>
                         </div>
-                        <p className="text-xs text-stone-500 line-clamp-2 leading-relaxed">{n.message}</p>
+                        <p className="text-xs text-stone-600 line-clamp-2 leading-relaxed">{n.message}</p>
                       </div>
                     </div>
                     
