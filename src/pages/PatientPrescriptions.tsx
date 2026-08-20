@@ -5,6 +5,7 @@ import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../hooks/useAuth';
 import { handleFirestoreError, OperationType } from '../lib/firestore-errors';
+import jsPDF from 'jspdf';
 
 export default function PatientPrescriptions() {
   const { user } = useAuth();
@@ -29,6 +30,49 @@ export default function PatientPrescriptions() {
     } catch (error) {
       handleFirestoreError(error, OperationType.LIST, 'prescriptions');
     }
+  };
+  const handleDownloadPrescription = (pres: any) => {
+    const pdf = new jsPDF();
+
+    const createdDate = pres.createdAt?.toDate
+      ? pres.createdAt.toDate().toLocaleDateString()
+      : 'N/A';
+
+    pdf.setFontSize(20);
+    pdf.text('HealthCare OS', 20, 20);
+
+    pdf.setFontSize(14);
+    pdf.text('Medical Prescription', 20, 35);
+
+    pdf.setFontSize(11);
+    pdf.text(`Prescription ID: ${pres.id}`, 20, 50);
+    pdf.text(`Date: ${createdDate}`, 20, 60);
+    pdf.text(`Doctor: ${pres.doctorName || 'Doctor'}`, 20, 70);
+    pdf.text(`Patient: ${pres.patientName || 'Patient'}`, 20, 80);
+
+    pdf.setFontSize(13);
+    pdf.text('Medicines', 20, 100);
+
+    let y = 110;
+
+    pres.medicines?.forEach((med: any, index: number) => {
+      pdf.setFontSize(11);
+      pdf.text(`${index + 1}. ${med.name}`, 20, y);
+      pdf.text(`Dosage: ${med.dosage}`, 30, y + 8);
+      pdf.text(`Duration: ${med.duration}`, 30, y + 16);
+
+      y += 30;
+    });
+
+    if (pres.notes) {
+      pdf.setFontSize(13);
+      pdf.text('Notes', 20, y + 5);
+
+      pdf.setFontSize(11);
+      pdf.text(pres.notes, 20, y + 15);
+    }
+
+    pdf.save(`Prescription-${pres.id.slice(0, 8)}.pdf`);
   };
 
   return (
@@ -58,8 +102,12 @@ export default function PatientPrescriptions() {
                 <div className="w-12 h-12 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center">
                   <FileText className="w-6 h-6" />
                 </div>
-                <button className="p-2 text-stone-400 hover:text-stone-900 transition-colors">
-                  <Download className="w-5 h-5" />
+                <button 
+                  onClick={() => handleDownloadPrescription(pres)}
+                  className="p-2 text-stone-400 hover:text-stone-900 transition-colors"
+                  title="Download prescription"
+                >
+                    <Download className="w-5 h-5" />
                 </button>
               </div>
               
@@ -69,11 +117,13 @@ export default function PatientPrescriptions() {
                   <div className="flex items-center gap-4 mt-2">
                     <div className="flex items-center gap-1.5 text-xs text-stone-400">
                       <Calendar className="w-3.5 h-3.5" />
-                      {new Date(pres.createdAt).toLocaleDateString()}
+                      {pres.createdAt?.toDate
+                        ? pres.createdAt.toDate().toLocaleDateString()
+                        : 'N/A'}
                     </div>
                     <div className="flex items-center gap-1.5 text-xs text-stone-400">
                       <User className="w-3.5 h-3.5" />
-                      Dr. {pres.doctorId}
+                       {pres.doctorName || 'Doctor'}
                     </div>
                   </div>
                 </div>

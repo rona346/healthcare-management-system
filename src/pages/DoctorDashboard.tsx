@@ -61,7 +61,6 @@ async function fetchDashboardStats() {
   if (!user) return;
   try {
     const data = await getDashboardStats(user.uid);
-    console.log("Dashboard Stats:", data);
     setStats(data);
     const recentActivities = await getRecentActivities(user.uid);
     setActivities(recentActivities);
@@ -75,14 +74,6 @@ async function fetchAppointments(){
   if(!user) return;
   try{
     const data = await getDoctorAppointments(user.uid);
-    console.table(
-      data.map((a: any) => ({
-        patientId: a.patientId,
-        patientName: a.patientName,
-        doctorId: a.doctorId,
-      }))
-    );
-    console.log(data);
     setAppointments(data);
   }catch(error){
     console.error("Error fetching appointments:", error);
@@ -94,6 +85,11 @@ const today = new Date().toISOString().split("T")[0];
 const todayAppointments = appointments.filter(
     (appointment) => appointment.date === today
   );
+const handlePatientDiagnosis = (patientId: string) => {
+  if (!patientId) return;
+
+  navigate(`/doctor/diagnoses?patientId=${patientId}`);
+};
 const dashboardCards = [
   {
     label: "Today",
@@ -141,10 +137,6 @@ const dashboardCards = [
           <button className="px-6 py-3 border border-stone-200 text-stone-600 rounded-xl hover:bg-stone-50 transition-colors text-sm font-sans" onClick={() => navigate("/doctor/appointments")}>
             View Schedule 
           </button>
-          <button className="px-6 py-3 bg-stone-900 text-white rounded-xl hover:bg-stone-800 transition-colors flex items-center gap-2 text-sm font-sans" onClick={() => navigate("/doctor/diagnoses")}>
-            <Activity className="w-4 h-4" />
-            Start Consultation
-          </button>
         </div>
       </header>
 
@@ -180,11 +172,13 @@ const dashboardCards = [
                   todayAppointments.map((app) => (
                     <PatientAppointmentCard
                       key={app.id}
+                      patientId={app.patientId}
                       patient={app.patientName}
                       age="-"
                       time={app.timeSlot}
                       symptoms={app.symptoms || "No symptoms"}
                       status={app.status}
+                      onDiagnosis={handlePatientDiagnosis}
                     />
                   ))
                 )}
@@ -216,7 +210,7 @@ const dashboardCards = [
           <section className="bg-stone-900 text-white rounded-3xl p-8">
             <h2 className="text-xl font-serif mb-6">Quick Actions</h2>
             <div className="space-y-4">
-              <QuickAction icon={Activity} label="AI Diagnosis Tool" light onClick={() => navigate("/doctor/diagnoses")}/>
+              <QuickAction icon={Activity} label="AI Diagnosis Tool" light  onClick={() => navigate('/doctor/diagnoses')}/>
               <QuickAction icon={Users} label="Manage Patients" dark onClick={() => navigate("/doctor/patients")}/>
               <QuickAction icon={Clock} label="Update Availability" dark onClick={() => navigate("/doctor/profile")}/>
             </div>
@@ -241,7 +235,7 @@ const dashboardCards = [
   );
 }
 
-function PatientAppointmentCard({ patient, age, time, symptoms, status }: any) {
+function PatientAppointmentCard({  patientId, patient, age, time, symptoms, status,  onDiagnosis}: any) {
   return (
     <div className="flex items-center justify-between p-6 border border-stone-50 rounded-2xl hover:bg-stone-50 transition-colors group">
       <div className="flex items-center gap-4">
@@ -274,9 +268,15 @@ function PatientAppointmentCard({ patient, age, time, symptoms, status }: any) {
           >
           {status}
         </span>
-        <button className="p-2 bg-stone-900 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-all">
+        {status === "confirmed" && (
+        <button 
+          type="button"
+          onClick={() => onDiagnosis(patientId)}
+          className="p-2 bg-stone-900 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-all"
+          title={`Open diagnosis for ${patient}`}>
           <ArrowRight className="w-4 h-4" />
         </button>
+        )}
       </div>
     </div>
   );

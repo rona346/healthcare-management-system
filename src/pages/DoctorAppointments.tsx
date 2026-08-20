@@ -2,12 +2,15 @@ import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Calendar, Clock, User, ArrowRight, Loader2, CheckCircle, XCircle } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 import { handleFirestoreError, OperationType } from '../lib/firestore-errors';
 import { cn } from '../lib/utils';
+
 import { getDoctorAppointments, updateAppointmentStatus } from "../services/appointmentService";
 
 export default function DoctorAppointments() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [appointments, setAppointments] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -26,12 +29,10 @@ export default function DoctorAppointments() {
   };
 
   const updateStatus = async (id: string, status: string, patientId: string) => {
-    console.log("Updating:", id, status);
     try {
       await updateAppointmentStatus(id, status, patientId, user?.displayName ?? 'Doctor');
       fetchAppointments();
       const appointments = await getDoctorAppointments(user!.uid);
-      console.log(appointments);
       setAppointments(appointments);
     } catch (error) {
       handleFirestoreError(error, OperationType.UPDATE, `appointments/${id}`);
@@ -121,9 +122,16 @@ export default function DoctorAppointments() {
                             <XCircle className="w-4 h-4" />
                           </button>
                         )}
-                        <button className="p-2 text-stone-900 hover:bg-stone-100 rounded-lg transition-colors">
+                        {app.status === 'confirmed' && (
+                        <button 
+                        type="button"
+                        onClick={() => navigate(`/doctor/diagnoses?patientId=${app.patientId}`)}
+                        className="p-2 text-stone-900 hover:bg-stone-100 rounded-lg transition-colors"
+                        title={`Open diagnosis for ${app.patientName || 'Patient'}`}
+                        >
                           <ArrowRight className="w-4 h-4" />
                         </button>
+                      )}
                       </div>
                     </td>
                   </tr>

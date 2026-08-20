@@ -5,9 +5,11 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../hooks/useAuth';
 import { handleFirestoreError, OperationType } from '../lib/firestore-errors';
+import { useNavigate } from 'react-router-dom';
 
 export default function DoctorPatients() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [patients, setPatients] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -107,7 +109,11 @@ export default function DoctorPatients() {
                       </div>
                     </td>
                     <td className="py-4 text-right">
-                      <button className="p-2 text-stone-900 hover:bg-stone-100 rounded-lg transition-colors">
+                      <button 
+                        onClick={() =>
+                          navigate(`/doctor/diagnoses?patientId=${patient.uid}`)
+                        }
+                      className="p-2 text-stone-900 hover:bg-stone-100 rounded-lg transition-colors">
                         <ArrowRight className="w-4 h-4" />
                       </button>
                     </td>
