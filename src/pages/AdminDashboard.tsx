@@ -5,17 +5,22 @@ import { Users, Stethoscope, Calendar, Activity, TrendingUp, AlertCircle, Search
 import { Link } from 'react-router-dom';
 import { cn } from '../lib/utils';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
-import { collection, query, where, getDocs, setDoc, doc } from 'firebase/firestore';
+import { collection, query, where, getDocs, setDoc, } from 'firebase/firestore';
+import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { User as UserType } from '../types';
 import { handleFirestoreError, OperationType } from '../lib/firestore-errors';
 import { getAdminDashboardStats, getPatientGrowth  } from "../services/adminDashboardService";
 
+type DashboardDoctor = UserType & {
+  patientCount: number;
+};
+
 
 export default function AdminDashboard() {
   const { user } = useAuth();
   const [isMounted, setIsMounted] = useState(false);
-  const [doctors, setDoctors] = useState<UserType[]>([]);
+  const [doctors, setDoctors] = useState<DashboardDoctor[]>([]);
   const [patientCount, setPatientCount] = useState(0);
   const [appointmentCount, setAppointmentCount] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -52,6 +57,23 @@ const fetchData = async () => {
     { label: 'Consultations', value: appointmentCount.toLocaleString(), icon: Calendar, color: 'bg-purple-50 text-purple-600', trend: '+18%' },
     { label: 'System Health', value: '99.9%', icon: Activity, color: 'bg-orange-50 text-orange-600', trend: 'Stable' },
   ];
+
+  const toggleDoctorStatus = async (doctor: UserType) => {
+  try {
+    await updateDoc(doc(db, "users", doctor.uid), {
+      isActive: !doctor.isActive,
+    });
+        setDoctors((prev) =>
+      prev.map((d) =>
+        d.uid === doctor.uid
+          ? { ...d, isActive: !d.isActive }
+          : d
+      )
+    );
+  } catch (error) {
+    console.error("Failed to update doctor status:", error);
+  }
+};
 
   return (
     <div className="space-y-8 max-w-6xl mx-auto">
@@ -156,11 +178,13 @@ const fetchData = async () => {
                     doctors.map((doc) => (
                       <DoctorRow 
                         key={doc.uid}
+                        doctor={doc}
                         name={doc.displayName} 
                         specialization={doc.specialization} 
-                        patients="0" 
+                        patients={doc.patientCount}
                         status={doc.isActive ? 'Active' : 'Inactive'} 
                         img={doc.photoURL}
+                        onToggleStatus={toggleDoctorStatus}
                       />
                     ))
                   )}
@@ -205,7 +229,7 @@ const fetchData = async () => {
   );
 }
 
-function DoctorRow({ name, specialization, patients, status, img }: any) {
+function DoctorRow({ doctor, name, specialization, patients, status, img , onToggleStatus, }: any) {
   return (
     <tr className="group hover:bg-stone-50 transition-colors">
       <td className="py-4">
@@ -217,13 +241,19 @@ function DoctorRow({ name, specialization, patients, status, img }: any) {
       <td className="py-4 text-sm text-stone-600">{specialization}</td>
       <td className="py-4 text-sm text-stone-600">{patients}</td>
       <td className="py-4">
-        <span className={cn(
-          "px-3 py-1 rounded-full text-[10px] uppercase tracking-widest font-bold",
-          status === 'Active' ? "bg-green-50 text-green-600" : "bg-orange-50 text-orange-600"
-        )}>
+        <button
+          onClick={() => onToggleStatus(doctor)}
+          className={cn(
+            "px-3 py-1 rounded-full text-[10px] uppercase tracking-widest font-bold cursor-pointer",
+            status === "Active"
+              ? "bg-green-50 text-green-600"
+              : "bg-orange-50 text-orange-600"
+          )}
+        >
           {status}
-        </span>
+        </button>
       </td>
+
       <td className="py-4 text-right">
         <button className="p-2 text-stone-300 hover:text-stone-900 transition-colors">
           <MoreVertical className="w-4 h-4" />

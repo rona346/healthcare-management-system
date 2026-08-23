@@ -26,16 +26,28 @@ export const getPatientDashboardStats = async (userId: string) => {
       where("userId", "==", userId)
     );
 
-    const [appointmentsSnapshot, notificationsSnapshot] =
+    const diagnosesQuery = query(
+      collection(db, "diagnoses"),
+      where("patientId", "==", userId)
+    );
+
+    const prescriptionsQuery = query(
+      collection(db, "prescriptions"),
+      where("patientId", "==", userId)
+    );
+
+    const [appointmentsSnapshot, notificationsSnapshot, diagnosesSnapshot, prescriptionsSnapshot] =
       await Promise.all([
         getDocs(appointmentsQuery),
         getDocs(notificationsQuery),
+        getDocs(diagnosesQuery),
+        getDocs(prescriptionsQuery),
       ]);
 
     return {
       upcoming: appointmentsSnapshot.size,
       diagnoses: 0,
-      prescriptions: 0,
+      prescriptions: prescriptionsSnapshot.size,
       messages: notificationsSnapshot.size,
     };
   } catch (error) {

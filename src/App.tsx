@@ -35,6 +35,32 @@ function ProtectedRoute({ children, role }: { children: React.ReactNode; role?: 
   return <>{children}</>;
 }
 
+function HomeRedirect() {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-[#f5f2ed]">
+        <div className="w-12 h-12 border-4 border-stone-900 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <Landing />;
+  }
+
+  if (user.role === "admin") {
+    return <Navigate to="/admin/dashboard" replace />;
+  }
+
+  if (user.role === "doctor") {
+    return <Navigate to="/doctor/dashboard" replace />;
+  }
+
+  return <Navigate to="/patient/dashboard" replace />;
+}
+
 function AppContent() {
   const { user } = useAuth();
 
@@ -46,7 +72,7 @@ function AppContent() {
         {user && <Sidebar />}
         <main className={cn("flex-1 p-8 transition-all duration-500", !user && "p-0")}>
           <Routes>
-            <Route path="/" element={<Landing />} />
+            <Route path="/" element={<HomeRedirect />} />
             <Route path="/login" element={<Login />} />
 
             {/* Admin Routes */}

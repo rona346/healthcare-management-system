@@ -34,16 +34,39 @@ export async function getAdminDashboardStats() {
       getDocs(appointmentsQuery),
     ]);
 
+    const doctorPatients = new Map<string, Set<string>>();
+    appointmentsSnap.docs.forEach((doc) => {
+      const appointment = doc.data();
+
+      if (appointment.status === "cancelled") return;
+
+      if (!appointment.doctorId || !appointment.patientId) return;
+
+      if (!doctorPatients.has(appointment.doctorId)) {
+        doctorPatients.set(appointment.doctorId, new Set<string>());
+      }
+
+      doctorPatients
+        .get(appointment.doctorId)!
+        .add(appointment.patientId);
+    });
+
+    const doctors = doctorsSnap.docs.map((doc) => {
+      const doctor = doc.data() as UserType;
+      return {
+        ...doctor,
+        patientCount: doctorPatients.get(doc.id)?.size ?? 0,
+      };
+    });
+
     return {
-      doctors: doctorsSnap.docs.map(
-        (doc) => doc.data() as UserType
-      ),
+      doctors,
       patientCount: patientsSnap.size,
       appointmentCount: appointmentsSnap.size,
     };
   } catch (error) {
     console.error("Admin Dashboard Error:", error);
-
+    
     return {
       doctors: [],
       patientCount: 0,
