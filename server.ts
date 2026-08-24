@@ -10,7 +10,7 @@ const __dirname = path.dirname(__filename);
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT =  Number(process.env.PORT) || 3000;
   app.use(express.json());
   console.log("Gemini Key Loaded:", !!process.env.GEMINI_API_KEY);
 
@@ -57,7 +57,7 @@ async function startServer() {
   }
 
   app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Server running on ${PORT}`);
   });
 }
 
