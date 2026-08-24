@@ -80,7 +80,8 @@ const handlePatientSelect = (id: string) => {
   const handleAnalyze = async () => {
     if (!symptoms.trim()) return;
     setLoading(true);
-    const response = await fetch("/api/diagnosis", {
+    const response = await fetch( `${import.meta.env.VITE_BACKEND_URL}/api/diagnosis`, 
+    {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -5,7 +5,7 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
 export async function getDiagnosisSuggestions(symptoms: string) {
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
+      model: "gemini-3.6-flash",
       contents: `As a professional medical assistant, analyze the following symptoms and suggest 3-5 possible conditions, their typical severity, and recommended next steps (tests or specialist consultations). 
       
       Symptoms: ${symptoms}
@@ -13,7 +13,6 @@ export async function getDiagnosisSuggestions(symptoms: string) {
       Format the response in clear Markdown with headers. Include a strong disclaimer that this is not a final diagnosis and a doctor must be consulted.`,
       config: {
         systemInstruction: "You are a highly accurate medical diagnostic assistant. Provide concise, professional, and evidence-based suggestions.",
-        temperature: 0.7,
       },
     });
 

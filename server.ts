@@ -4,6 +4,7 @@ import { getDiagnosisSuggestions } from "./src/services/gemini";
 import { createServer as createViteServer } from "vite";
 import path from "path";
 import { fileURLToPath } from "url";
+import cors from "cors";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -11,7 +12,17 @@ const __dirname = path.dirname(__filename);
 async function startServer() {
   const app = express();
   const PORT =  Number(process.env.PORT) || 3000;
-  app.use(express.json());
+
+    app.use(
+      cors({
+        origin: [
+          "http://localhost:5173",
+          "https://healthcare-management-system-app.netlify.app",
+        ],
+      })
+    );
+
+    app.use(express.json());
   console.log("Gemini Key Loaded:", !!process.env.GEMINI_API_KEY);
 
   // API routes
